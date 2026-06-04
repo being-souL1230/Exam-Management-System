@@ -1,0 +1,55 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f0c20"/>
+      <stop offset="100%" stop-color="#0a0a19"/>
+    </linearGradient>
+    <linearGradient id="hgrad" x1="38" y1="36" x2="142" y2="144" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="50%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#5eead4"/>
+    </linearGradient>
+    <linearGradient id="stroke_grad" x1="38" y1="36" x2="142" y2="144" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0.7"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="outer_glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.48  0 0 0 0 0.27  0 0 0 0 0.98  0 0 0 0.6 0" result="colored"/>
+      <feMerge>
+        <feMergeNode in="colored"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="180" height="180" rx="40" fill="url(#bg)"/>
+
+  <!-- Subtle border ring -->
+  <rect x="1.5" y="1.5" width="177" height="177" rx="38.5" fill="none" stroke="url(#stroke_grad)" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- Outer glow halo behind H -->
+  <text x="90" y="133" text-anchor="middle"
+    font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
+    font-weight="800" font-size="112" letter-spacing="-4"
+    fill="url(#hgrad)" filter="url(#outer_glow)" opacity="0.55">H</text>
+
+  <!-- Main H with gradient fill -->
+  <text x="90" y="133" text-anchor="middle"
+    font-family="'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
+    font-weight="800" font-size="112" letter-spacing="-4"
+    fill="url(#hgrad)" filter="url(#glow)">H</text>
+
+  <!-- Top-left corner accent dot -->
+  <circle cx="30" cy="30" r="3" fill="#a78bfa" opacity="0.6"/>
+  <!-- Bottom-right corner accent dot -->
+  <circle cx="150" cy="150" r="3" fill="#5eead4" opacity="0.6"/>
+</svg>

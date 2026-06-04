@@ -1,0 +1,96 @@
+/* ── Premium Status Dot ─────────────────────────────────────── */
+
+@keyframes sdot-bloom-green {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0   rgba(34, 197, 94, 0.55),
+      0 0 6px 1px rgba(34, 197, 94, 0.35);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5px  rgba(34, 197, 94, 0),
+      0 0 14px 3px rgba(34, 197, 94, 0.5);
+  }
+}
+@keyframes sdot-bloom-amber {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0   rgba(245, 158, 11, 0.6),
+      0 0 6px 1px rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5px  rgba(245, 158, 11, 0),
+      0 0 14px 3px rgba(245, 158, 11, 0.55);
+  }
+}
+@keyframes sdot-bloom-orange {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0   rgba(249, 115, 22, 0.6),
+      0 0 6px 1px rgba(249, 115, 22, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5px  rgba(249, 115, 22, 0),
+      0 0 14px 3px rgba(249, 115, 22, 0.55);
+  }
+}
+@keyframes sdot-bloom-red {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0   rgba(239, 68, 68, 0.6),
+      0 0 6px 1px rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5px  rgba(239, 68, 68, 0),
+      0 0 14px 3px rgba(239, 68, 68, 0.55);
+  }
+}
+@keyframes sdot-bloom-gray {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0   rgba(148, 163, 184, 0.3),
+      0 0 4px 1px rgba(148, 163, 184, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px  rgba(148, 163, 184, 0),
+      0 0 8px 2px rgba(148, 163, 184, 0.3);
+  }
+}
+@keyframes sdot-bloom-blue {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0   rgba(99, 102, 241, 0.6),
+      0 0 6px 1px rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5px  rgba(99, 102, 241, 0),
+      0 0 14px 3px rgba(99, 102, 241, 0.55);
+  }
+}
+
+.sdot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+/* Sizes */
+.sdot--sm { width: 8px;  height: 8px; }
+.sdot--md { width: 10px; height: 10px; }
+.sdot--lg { width: 13px; height: 13px; }
+
+/* Cores */
+.sdot--green  { background: #22c55e; animation: sdot-bloom-green  2.4s ease-in-out infinite; }
+.sdot--amber  { background: #f59e0b; animation: sdot-bloom-amber  2.0s ease-in-out infinite; }
+.sdot--orange { background: #f97316; animation: sdot-bloom-orange 2.0s ease-in-out infinite; }
+.sdot--red    { background: #ef4444; animation: sdot-bloom-red    1.8s ease-in-out infinite; }
+.sdot--gray   { background: #94a3b8; animation: sdot-bloom-gray   3.0s ease-in-out infinite; }
+.sdot--blue   { background: #6366f1; animation: sdot-bloom-blue   2.4s ease-in-out infinite; }

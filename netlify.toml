@@ -1,0 +1,24 @@
+[build]
+  base = "artifacts/exam-system"
+  publish = "dist"
+  command = "pnpm install --frozen-lockfile=false && pnpm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--version"
+  PORT = "5000"
+  BASE_PATH = "/"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://exam-management-systemm.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[context.production]
+  environment = { API_URL = "https://exam-management-systemm.onrender.com" }

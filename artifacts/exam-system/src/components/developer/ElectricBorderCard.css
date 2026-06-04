@@ -1,0 +1,228 @@
+:root {
+  --dev-electric-color: #8b5cf6;
+  --dev-gradient-color: rgba(139, 92, 246, 0.32);
+  --dev-neutral-900: oklch(0.185 0 0);
+}
+
+.eb-main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.eb-card-container {
+  padding: 2px;
+  border-radius: 20px;
+  position: relative;
+  width: 100%;
+  max-width: 820px;
+  background:
+    linear-gradient(-30deg, var(--dev-gradient-color), transparent, var(--dev-gradient-color)),
+    linear-gradient(to bottom, var(--dev-neutral-900), var(--dev-neutral-900));
+}
+
+/* The animated electric border frame — sits behind content */
+.eb-border-frame {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.eb-border-outer {
+  border: 2px solid rgba(139, 92, 246, 0.45);
+  border-radius: 20px;
+  position: absolute;
+  inset: 0;
+}
+
+.eb-main-card-border {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  border: 2px solid var(--dev-electric-color);
+  position: absolute;
+  inset: 0;
+  filter: url(#dev-turbulent-displace);
+}
+
+.eb-glow-layer-1 {
+  border: 2px solid rgba(139, 92, 246, 0.55);
+  border-radius: 20px;
+  position: absolute;
+  inset: 0;
+  filter: blur(1px);
+}
+
+.eb-glow-layer-2 {
+  border: 2px solid var(--dev-electric-color);
+  border-radius: 20px;
+  position: absolute;
+  inset: 0;
+  filter: blur(4px);
+}
+
+.eb-overlay-1 {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  opacity: 0.8;
+  mix-blend-mode: overlay;
+  transform: scale(1.08);
+  filter: blur(14px);
+  background: linear-gradient(-30deg, white, transparent 30%, transparent 70%, white);
+  pointer-events: none;
+}
+
+.eb-background-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  filter: blur(28px);
+  transform: scale(1.08);
+  opacity: 0.25;
+  z-index: -1;
+  background: linear-gradient(-30deg, var(--dev-electric-color), transparent, var(--dev-electric-color));
+  pointer-events: none;
+}
+
+/* Actual content — flows naturally, no absolute positioning */
+.eb-content {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  padding: 22px 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Top row: badge + profile + social side by side */
+.eb-top-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.eb-badge {
+  background: rgba(255, 255, 255, 0.07);
+  position: relative;
+  border-radius: 10px;
+  padding: 5px 12px;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.75);
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.eb-badge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: linear-gradient(150deg, rgba(255,255,255,0.4) 16%, rgba(255,255,255,0.07) 30%, rgba(255,255,255,0.07) 68%, rgba(255,255,255,0.5) 82%);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+.eb-profile-social-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.eb-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.40);
+}
+
+.eb-avatar-initials {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.eb-name-block {
+  flex: 1;
+  min-width: 0;
+}
+
+.eb-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #fff;
+  margin: 0;
+}
+
+.eb-role {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.eb-social-corner {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.eb-divider {
+  border: none;
+  height: 1px;
+  background-color: currentColor;
+  opacity: 0.1;
+  mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+  margin: 0;
+}
+
+.eb-bottom-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eb-description {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.58);
+  margin: 0;
+  max-width: 600px;
+}
+
+.eb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.eb-tag {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}

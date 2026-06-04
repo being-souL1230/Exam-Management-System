@@ -1,0 +1,320 @@
+/* ── Grid — flex row on desktop so connectors span the EXACT gap between circles ── */
+.glass-3d-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 48rem;
+  padding-bottom: 16px;
+}
+
+@media (min-width: 640px) {
+  .glass-3d-grid {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+  }
+}
+
+/* ── Card wrapper: fixed 158px so connectors abut the circle edge exactly ── */
+@media (min-width: 640px) {
+  .glass-3d-wrapper {
+    flex: 0 0 158px;
+  }
+}
+
+/* ── Wrapper: gives room for the reflection pool below the circle ── */
+.glass-3d-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 44px;       /* space reserved for reflection */
+}
+
+/* ── Reflection pool layer 1 — diffused outer glow ── */
+.glass-3d-wrapper::before {
+  content: "";
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 130px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(160, 200, 255, 0.28) 0%,
+    rgba(130, 180, 255, 0.10) 55%,
+    transparent 80%
+  );
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Reflection pool layer 2 — sharp bright caustic ring ── */
+.glass-3d-wrapper::after {
+  content: "";
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 86px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(220, 235, 255, 0.55) 0%,
+    rgba(190, 215, 255, 0.22) 50%,
+    transparent 80%
+  );
+  filter: blur(3px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── The circle card ── */
+.glass-3d-card {
+  position: relative;
+  width: 158px;
+  height: 158px;
+  border-radius: 50%;
+  overflow: hidden;                      /* clips content + pseudo to circle */
+
+  /* Real CSS mirror reflection — partial, fades after ~50% of card height */
+  -webkit-box-reflect: below 5px
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.10) 30%,
+      transparent 60%
+    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* glass border — brighter on top, dimmer on bottom (light from above) */
+  border-top:    1.5px solid rgba(255, 255, 255, 0.40);
+  border-left:   1.5px solid rgba(255, 255, 255, 0.22);
+  border-right:  1.5px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.06);
+
+  background: radial-gradient(
+    circle at 38% 30%,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.09) 35%,
+    rgba(255, 255, 255, 0.03) 70%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.60),
+    0 3px 10px rgba(0, 0, 0, 0.40),
+    inset 0 2px 3px rgba(255, 255, 255, 0.25),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.25);
+
+  /* 3D tilt */
+  transform: perspective(600px) rotateX(8deg) rotateY(-2deg) translateZ(0);
+  transform-style: preserve-3d;
+  transition:
+    transform  0.38s cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 0.38s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: default;
+  z-index: 1;
+}
+
+/* ── Top-hemisphere gloss highlight (the bright top-left shine on a glass ball) ── */
+.glass-3d-card::before {
+  content: "";
+  position: absolute;
+  top: 8%;
+  left: 12%;
+  width: 55%;
+  height: 45%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 40% 30%,
+    rgba(255, 255, 255, 0.38) 0%,
+    rgba(255, 255, 255, 0.14) 45%,
+    transparent 75%
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── Bottom rim — soft inner glow at the bottom of the sphere ── */
+.glass-3d-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(140, 180, 255, 0.14) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Hover: lift, flatten tilt, deepen shadows ── */
+.glass-3d-card:hover {
+  transform: perspective(600px) rotateX(0deg) rotateY(0deg) translateY(-7px) translateZ(0);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.70),
+    0 6px 20px rgba(0, 0, 0, 0.45),
+    inset 0 2px 3px rgba(255, 255, 255, 0.30),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.20);
+}
+
+/* ── Hover: reflection pool expands and brightens ── */
+.glass-3d-wrapper:hover::before {
+  width: 160px;
+  height: 36px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(160, 200, 255, 0.40) 0%,
+    rgba(130, 180, 255, 0.16) 55%,
+    transparent 80%
+  );
+  transition: all 0.38s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glass-3d-wrapper:hover::after {
+  width: 100px;
+  height: 16px;
+  bottom: 12px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(220, 235, 255, 0.70) 0%,
+    rgba(190, 215, 255, 0.28) 50%,
+    transparent 80%
+  );
+  transition: all 0.38s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ── Card content ── */
+.glass-3d-card-body {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 14px;
+  gap: 4px;
+}
+
+.glass-3d-accent {
+  display: block;
+  width: 22px;
+  height: 2.5px;
+  border-radius: 2px;
+  margin: 0 auto 6px;
+}
+
+.glass-3d-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+}
+
+.glass-3d-desc {
+  font-size: 0.67rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+/* ══════════════════════════════════════════════
+   CONNECTORS between circle cards
+   ══════════════════════════════════════════════ */
+
+/* Hidden on mobile */
+.glass-3d-connector {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .glass-3d-connector {
+    display: flex;
+    flex: 1;                   /* fills EXACTLY the gap between circle edges */
+    align-items: flex-start;
+    justify-content: stretch;
+    padding-top: 79px;         /* 158px circle ÷ 2 = circle vertical centre */
+    min-width: 40px;
+  }
+}
+
+/* ── The horizontal track ── */
+.glass-3d-connector-track {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  transform: translateY(-50%);
+  overflow: visible;
+}
+
+/* Subtle outer glow on the line itself */
+.glass-3d-connector-track::before {
+  content: "";
+  position: absolute;
+  inset: -2px 0;
+  border-radius: 4px;
+  background: inherit;
+  filter: blur(4px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* ── Traveling orb animation ── */
+@keyframes conn-travel {
+  0%   { left: -6px;              opacity: 0;   transform: translateY(-50%) scale(0.6); }
+  8%   { opacity: 1;              transform: translateY(-50%) scale(1); }
+  92%  { opacity: 1;              transform: translateY(-50%) scale(1); }
+  100% { left: calc(100% + 6px); opacity: 0;   transform: translateY(-50%) scale(0.6); }
+}
+
+.glass-3d-connector-track::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 0  8px 3px var(--conn-glow, rgba(56,189,248,0.9)),
+    0 0 18px 6px var(--conn-glow, rgba(56,189,248,0.5));
+  animation: conn-travel 2.4s ease-in-out infinite;
+  animation-delay: var(--conn-delay, 0s);
+}
+
+/* ── Centre diamond pip ── */
+.glass-3d-connector-pip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.35);
+  z-index: 2;
+}
+
+/* Hover: brighten the track */
+.glass-3d-connector:hover .glass-3d-connector-track {
+  filter: brightness(1.4);
+}

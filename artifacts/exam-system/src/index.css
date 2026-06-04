@@ -1,0 +1,249 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --background: 216 38% 97%;
+  --foreground: 222 47% 11%;
+  --border: 217 24% 86%;
+  --input: 217 24% 86%;
+  --ring: 224 78% 52%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --card-border: 217 24% 88%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --popover-border: 217 24% 88%;
+  --primary: 224 78% 52%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 216 35% 94%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 216 35% 94%;
+  --muted-foreground: 217 16% 39%;
+  --accent: 216 35% 94%;
+  --accent-foreground: 222 47% 11%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 222 47% 11%;
+  --sidebar-border: 217 24% 88%;
+  --sidebar-primary: 224 78% 52%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 216 35% 94%;
+  --sidebar-accent-foreground: 222 47% 11%;
+  --sidebar-ring: 224 78% 52%;
+  --chart-1: 224 78% 52%;
+  --chart-2: 188 86% 43%;
+  --chart-3: 262 83% 58%;
+  --chart-4: 32 95% 52%;
+  --chart-5: 148 67% 38%;
+  --app-font-sans: "Inter", "Plus Jakarta Sans", system-ui, sans-serif;
+  --app-font-serif: Georgia, serif;
+  --app-font-mono: Menlo, monospace;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: 222 47% 9%;
+  --foreground: 210 40% 98%;
+  --border: 217 32% 18%;
+  --input: 217 32% 22%;
+  --ring: 217 91% 60%;
+  --card: 222 44% 12%;
+  --card-foreground: 210 40% 98%;
+  --card-border: 217 32% 18%;
+  --popover: 222 44% 12%;
+  --popover-foreground: 210 40% 98%;
+  --popover-border: 217 32% 18%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 222 47% 11%;
+  --secondary: 217 32% 17%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217 32% 17%;
+  --muted-foreground: 215 20% 66%;
+  --accent: 217 32% 17%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 63% 42%;
+  --destructive-foreground: 0 0% 100%;
+  --sidebar: 222 44% 12%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-border: 217 32% 18%;
+  --sidebar-primary: 217 91% 60%;
+  --sidebar-primary-foreground: 222 47% 11%;
+  --sidebar-accent: 217 32% 17%;
+  --sidebar-accent-foreground: 210 40% 98%;
+  --sidebar-ring: 217 91% 60%;
+  --chart-1: 217 91% 60%;
+  --chart-2: 188 86% 53%;
+  --chart-3: 262 83% 68%;
+  --chart-4: 32 95% 62%;
+  --chart-5: 148 67% 48%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.10), transparent 34%),
+      radial-gradient(circle at 100% 100%, hsl(var(--chart-2) / 0.08), transparent 32%);
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply tracking-tight;
+  }
+}
+
+@layer components {
+  .page-shell {
+    @apply mx-auto w-full max-w-7xl space-y-4;
+  }
+
+  .page-header {
+    @apply flex flex-col gap-2 md:flex-row md:items-center md:justify-between;
+  }
+
+  .page-title {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+
+  .page-subtitle {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .premium-glass {
+    @apply bg-card/90 backdrop-blur-xl;
+  }
+
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+}
+
+@layer utilities {
+  input[type="search"]::-webkit-search-cancel-button {
+    @apply hidden;
+  }
+
+  [contenteditable][data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: hsl(var(--muted-foreground));
+    pointer-events: none;
+  }
+}
+
+/* ── Hero card 3D tilt effect (Uiverse Smit-Prajapati) ── */
+.hero-card-3d-parent {
+  perspective: 1000px;
+}
+
+.hero-card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease-in-out;
+}
+
+.hero-card-3d:hover {
+  transform: rotate3d(0.5, 1, 0, 25deg);
+}
+
+/* ── Feature container animated border (Uiverse MuhammadHasann) ── */
+
+/* Outer wrapper — holds the rotating glow as a border */
+.feature-outer {
+  position: relative;
+  padding: 2px;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.feature-outer::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -100%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 120deg,
+    hsl(277, 95%, 60%) 150deg,
+    hsl(306, 100%, 70%) 180deg,
+    hsl(277, 95%, 60%) 210deg,
+    transparent 240deg,
+    transparent 360deg
+  );
+  animation: feature-border-rotate 6s linear infinite;
+}
+
+@keyframes feature-border-rotate {
+  to { transform: rotate(360deg); }
+}
+
+/* Inner container — dark background with purple radial glows */
+.feature-container {
+  position: relative;
+  z-index: 1;
+  background-color: hsla(240, 15%, 9%, 1);
+  background-image:
+    radial-gradient(at 88% 40%, hsla(240, 15%, 9%, 1) 0px, transparent 85%),
+    radial-gradient(at 49% 30%, hsla(240, 15%, 9%, 1) 0px, transparent 85%),
+    radial-gradient(at 14% 26%, hsla(240, 15%, 9%, 1) 0px, transparent 85%),
+    radial-gradient(at 0% 64%,  hsla(263, 93%, 56%, 1) 0px, transparent 85%),
+    radial-gradient(at 41% 94%, hsla(284, 100%, 84%, 1) 0px, transparent 85%),
+    radial-gradient(at 100% 99%, hsla(306, 100%, 57%, 1) 0px, transparent 85%);
+  border-radius: calc(1rem - 2px);
+  box-shadow: 0px -16px 24px 0px rgba(255, 255, 255, 0.25) inset;
+  overflow: hidden;
+}

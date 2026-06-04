@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: exam-manager
+    env: python
+    plan: free
+    buildCommand: |
+      pip install -r artifacts/api-server/requirements.txt
+      corepack pnpm install --frozen-lockfile=false
+      BASE_PATH=/ PORT=10000 corepack pnpm --filter @workspace/exam-system run build
+    startCommand: cd artifacts/api-server && gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.4
+      - key: NODE_VERSION
+        value: 20
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        value: file:./data/exam-manager.sqlite

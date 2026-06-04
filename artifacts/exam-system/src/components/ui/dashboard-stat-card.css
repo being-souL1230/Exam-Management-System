@@ -1,0 +1,55 @@
+/* ── 3D Stat Cards — pure box-shadow, no z-index tricks ──────── */
+
+.dsc-card {
+  position: relative;
+  min-width: 0;
+  box-sizing: border-box;
+  background: transparent;
+  user-select: none;
+  display: block;
+  width: 100%;
+  /* extra bottom space so the shadow depth isn't clipped */
+  padding-bottom: 4px;
+}
+
+.dsc-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 16px 20px 14px;
+  text-align: left;
+  min-height: 82px;
+  border-radius: 8px;
+  background-color: hsl(var(--card));
+  box-shadow:
+    /* 1 — subtle top highlight */
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    /* 2 — visible border outline */
+    inset 0 0 0 1px color-mix(in srgb, hsl(var(--foreground)) 13%, transparent),
+    /* 3 — solid depth ledge (the 3D face underside) */
+    0 5px 0 color-mix(in srgb, hsl(var(--foreground)) 26%, hsl(var(--card))),
+    /* 4 — thin edge under the ledge */
+    0 6px 0 1px color-mix(in srgb, hsl(var(--foreground)) 10%, transparent),
+    /* 5 — soft drop shadow for lift */
+    0 7px 8px rgba(0, 0, 0, 0.12);
+}
+
+.dsc-label {
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 6px;
+  line-height: 1;
+}
+
+.dsc-value {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: hsl(var(--foreground));
+  font-variant-numeric: tabular-nums;
+}

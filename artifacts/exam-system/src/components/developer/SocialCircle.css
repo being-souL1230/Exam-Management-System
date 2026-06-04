@@ -1,0 +1,54 @@
+.social-circle-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.social-circle-up {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+}
+
+.social-circle-down {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+}
+
+.sc-card {
+  width: 48px;
+  height: 48px;
+  outline: none;
+  border: none;
+  background: white;
+  box-shadow: rgba(50, 50, 93, 0.2) 0px 2px 5px -1px, rgba(0, 0, 0, 0.25) 0px 1px 3px -1px;
+  transition: 0.18s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sc-card1 { border-radius: 48px 4px 4px 4px; }
+.sc-card2 { border-radius: 4px 48px 4px 4px; }
+.sc-card3 { border-radius: 4px 4px 4px 48px; }
+.sc-card4 { border-radius: 4px 4px 48px 4px; }
+
+.sc-instagram { fill: #cc39a4; }
+.sc-twitter   { fill: #03A9F4; }
+.sc-github    { fill: #333;    }
+.sc-discord   { fill: #8c9eff; }
+
+.sc-card1:hover { scale: 1.08; background-color: #cc39a4; }
+.sc-card1:hover .sc-instagram { fill: white; }
+
+.sc-card2:hover { scale: 1.08; background-color: #03A9F4; }
+.sc-card2:hover .sc-twitter { fill: white; }
+
+.sc-card3:hover { scale: 1.08; background-color: #111; }
+.sc-card3:hover .sc-github { fill: white; }
+
+.sc-card4:hover { scale: 1.08; background-color: #8c9eff; }
+.sc-card4:hover .sc-discord { fill: white; }

@@ -1,0 +1,11 @@
+{
+  "name": "@workspace/api-server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "python app.py",
+    "build": "python -m py_compile app.py",
+    "start": "python app.py",
+    "typecheck": "python -m py_compile app.py"
+  }
+}

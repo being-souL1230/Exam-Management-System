@@ -1,0 +1,231 @@
+.space-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  height: 3rem;
+  background-size: 300% 300%;
+  cursor: pointer;
+  backdrop-filter: blur(1rem);
+  border-radius: 5rem;
+  transition: 0.5s;
+  animation: sb_gradient_301 5s ease infinite;
+  border: double 4px transparent;
+  background-image: linear-gradient(#212121, #212121),
+    linear-gradient(
+      137.48deg,
+      #ffdb3b 10%,
+      #fe53bb 45%,
+      #8f51ea 67%,
+      #0044ff 87%
+    );
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  position: relative;
+}
+
+/* matches EntryButton — 240 × 56 px, used inline in the hero row */
+.space-btn--auto {
+  width: 240px;
+  height: 56px;
+  padding: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.space-btn-stars-container {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transition: 0.5s;
+  backdrop-filter: blur(1rem);
+  border-radius: 5rem;
+}
+
+.space-btn strong {
+  z-index: 2;
+  font-size: 12px;
+  letter-spacing: 5px;
+  color: #ffffff;
+  text-shadow: 0 0 4px white;
+  font-weight: 700;
+}
+
+.space-btn-glow {
+  position: absolute;
+  display: flex;
+  width: 12rem;
+}
+
+.space-btn-circle {
+  width: 100%;
+  height: 30px;
+  filter: blur(2rem);
+  animation: sb_pulse_3011 4s infinite;
+  z-index: -1;
+}
+
+.space-btn-circle:nth-of-type(1) {
+  background: rgba(254, 83, 186, 0.636);
+}
+
+.space-btn-circle:nth-of-type(2) {
+  background: rgba(142, 81, 234, 0.704);
+}
+
+.space-btn:hover .space-btn-stars-container {
+  z-index: 1;
+  background-color: #212121;
+}
+
+.space-btn:hover {
+  transform: scale(1.05);
+}
+
+.space-btn:active {
+  border: double 4px #fe53bb;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  animation: none;
+}
+
+.space-btn:active .space-btn-circle {
+  background: #fe53bb;
+}
+
+.space-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.space-btn-stars {
+  position: relative;
+  background: transparent;
+  width: 200rem;
+  height: 200rem;
+}
+
+.space-btn-stars::after {
+  content: "";
+  position: absolute;
+  top: -10rem;
+  left: -100rem;
+  width: 100%;
+  height: 100%;
+  animation: sb_animStarRotate 90s linear infinite;
+  background-image: radial-gradient(#ffffff 1px, transparent 1%);
+  background-size: 50px 50px;
+}
+
+.space-btn-stars::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 170%;
+  height: 500%;
+  animation: sb_animStar 60s linear infinite;
+  background-image: radial-gradient(#ffffff 1px, transparent 1%);
+  background-size: 50px 50px;
+  opacity: 0.5;
+}
+
+@keyframes sb_animStar {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-135rem); }
+}
+
+@keyframes sb_animStarRotate {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+
+@keyframes sb_gradient_301 {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes sb_pulse_3011 {
+  0% {
+    transform: scale(0.75);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+  100% {
+    transform: scale(0.75);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   NAV SIGN-IN BUTTON
+   Same rainbow-border + dark-glass aesthetic as
+   the space-btn, compact for the top nav bar.
+   Reuses sb_gradient_301 already defined above.
+   ══════════════════════════════════════════════ */
+.nav-signin-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 22px;
+  overflow: hidden;
+  cursor: pointer;
+  backdrop-filter: blur(1rem);
+  border-radius: 5rem;
+  transition: transform 0.3s ease, letter-spacing 0.3s ease;
+  animation: sb_gradient_301 5s ease infinite;
+  border: double 2px transparent;
+  background-image:
+    linear-gradient(#1a1a1a, #1a1a1a),
+    linear-gradient(137.48deg, #ffdb3b 10%, #fe53bb 45%, #8f51ea 67%, #0044ff 87%);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  background-size: 300% 300%;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  position: relative;
+}
+
+/* inner shimmer pulse — reuses the same glow circles */
+.nav-signin-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 5rem;
+  background: radial-gradient(
+    ellipse at 50% 120%,
+    rgba(254, 83, 186, 0.25) 0%,
+    rgba(142, 81, 234, 0.15) 50%,
+    transparent 75%
+  );
+  pointer-events: none;
+  animation: sb_pulse_3011 4s ease infinite;
+}
+
+.nav-signin-btn:hover {
+  transform: scale(1.05);
+  letter-spacing: 5px;
+}
+
+.nav-signin-btn:active {
+  border: double 2px #fe53bb;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  animation: none;
+}
