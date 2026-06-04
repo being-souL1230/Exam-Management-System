@@ -397,22 +397,28 @@ def _auto_publish_worker() -> None:
                 conn.execute("UPDATE exams SET status = 'completed' WHERE id = ? AND status = 'scheduled'", (exam_id,))
                 has_results = conn.execute("SELECT COUNT(*) as c FROM results WHERE exam_id = ?", (exam_id,)).fetchone()["c"]
                 if has_results == 0:
+                    total_marks = conn.execute(
+                        "SELECT COALESCE(SUM(q.marks), 0) AS total FROM exam_questions eq JOIN questions q ON eq.question_id = q.id WHERE eq.exam_id = ?",
+                        (exam_id,)
+                    ).fetchone()["total"] or exam["total_marks"] or 1
                     sessions = conn.execute("SELECT * FROM student_exams WHERE exam_id = ?", (exam_id,)).fetchall()
                     result_data = []
                     for session in sessions:
                         answers = conn.execute(
-                            "SELECT a.answer_text, q.correct_answer, q.marks FROM answers a LEFT JOIN questions q ON a.question_id = q.id WHERE a.student_exam_id = ?",
-                            (session["id"],)
+                            "SELECT a.answer_text, q.correct_answer, q.marks FROM answers a "
+                            "JOIN exam_questions eq ON eq.question_id = a.question_id AND eq.exam_id = ? "
+                            "JOIN questions q ON a.question_id = q.id WHERE a.student_exam_id = ?",
+                            (exam_id, session["id"])
                         ).fetchall()
                         obtained = sum((float(a["marks"]) if a["marks"] else 1.0) if a["answer_text"] == a["correct_answer"] else 0 for a in answers)
-                        pct = (obtained / float(exam["total_marks"])) * 100 if exam["total_marks"] else 0
+                        pct = (obtained / float(total_marks)) * 100 if total_marks else 0
                         result_data.append({"student_id": session["student_id"], "marks_obtained": obtained, "percentage": pct})
                     result_data.sort(key=lambda r: r["marks_obtained"], reverse=True)
                     for idx, rd in enumerate(result_data, start=1):
                         grade = calculate_grade(rd["percentage"])
                         conn.execute(
                             "INSERT OR IGNORE INTO results (student_id, exam_id, total_marks, marks_obtained, grade, percentage, rank, published) VALUES (?, ?, ?, ?, ?, ?, ?, 1)",
-                            (rd["student_id"], exam_id, exam["total_marks"], rd["marks_obtained"], grade, round(rd["percentage"], 2), idx)
+                            (rd["student_id"], exam_id, total_marks, rd["marks_obtained"], grade, round(rd["percentage"], 2), idx)
                         )
                 else:
                     conn.execute("UPDATE results SET published = 1 WHERE exam_id = ?", (exam_id,))
@@ -1249,13 +1255,18 @@ def _auto_evaluate(session_id: int, student_id: int, exam_id: int) -> dict:
     exam = query_one("SELECT * FROM exams WHERE id = ?", (exam_id,))
     if exam is None:
         return {}
+    total_row = query_one(
+        "SELECT COALESCE(SUM(q.marks), 0) AS total FROM exam_questions eq JOIN questions q ON eq.question_id = q.id WHERE eq.exam_id = ?",
+        (exam_id,)
+    )
     answers = query_all(
         "SELECT a.answer_text, q.correct_answer, q.marks FROM answers a "
+        "JOIN exam_questions eq ON eq.question_id = a.question_id AND eq.exam_id = ? "
         "JOIN questions q ON a.question_id = q.id WHERE a.student_exam_id = ?",
-        (session_id,)
+        (exam_id, session_id)
     )
     obtained = sum((a["marks"] or 1) for a in answers if a["answer_text"] and a["answer_text"] == a["correct_answer"])
-    total = exam["total_marks"] or 1
+    total = (total_row["total"] if total_row else 0) or exam["total_marks"] or 1
     pct = round((obtained / total) * 100, 2)
     grade = calculate_grade(pct)
     existing = query_one("SELECT id FROM results WHERE student_id = ? AND exam_id = ?", (student_id, exam_id))
@@ -1371,13 +1382,23 @@ def calculate_results(exam_id: int):
     execute("DELETE FROM results WHERE exam_id = ?", (exam_id,))
     sessions = query_all("SELECT * FROM student_exams WHERE exam_id = ?", (exam_id,))
     result_data = []
+    total_row = query_one(
+        "SELECT COALESCE(SUM(q.marks), 0) AS total FROM exam_questions eq JOIN questions q ON eq.question_id = q.id WHERE eq.exam_id = ?",
+        (exam_id,)
+    )
+    total_marks = (total_row["total"] if total_row else 0) or exam["total_marks"] or 1
     for session in sessions:
-        answers = query_all("""SELECT a.*, q.correct_answer, q.question_type, q.marks FROM answers a LEFT JOIN questions q ON a.question_id = q.id WHERE a.student_exam_id = ?""", (session["id"],))
+        answers = query_all(
+            """SELECT a.*, q.correct_answer, q.question_type, q.marks FROM answers a
+               JOIN exam_questions eq ON eq.question_id = a.question_id AND eq.exam_id = ?
+               JOIN questions q ON a.question_id = q.id WHERE a.student_exam_id = ?""",
+            (exam_id, session["id"])
+        )
         obtained = 0.0
         for ans in answers:
             obtained += ans["marks"] or 1 if ans["answer_text"] == ans["correct_answer"] else 0
-        percentage = (obtained / exam["total_marks"]) * 100 if exam["total_marks"] else 0
-        result_data.append({"student_id": session["student_id"], "exam_id": exam_id, "total_marks": exam["total_marks"], "marks_obtained": obtained, "grade": calculate_grade(percentage), "percentage": round(percentage, 2)})
+        percentage = (obtained / total_marks) * 100 if total_marks else 0
+        result_data.append({"student_id": session["student_id"], "exam_id": exam_id, "total_marks": total_marks, "marks_obtained": obtained, "grade": calculate_grade(percentage), "percentage": round(percentage, 2)})
     result_data.sort(key=lambda r: r["marks_obtained"], reverse=True)
     for idx, data in enumerate(result_data, start=1):
         data["rank"] = idx
