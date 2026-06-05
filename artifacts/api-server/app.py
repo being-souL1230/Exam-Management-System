@@ -14,6 +14,7 @@ import threading
 from functools import wraps
 from pathlib import Path
 from typing import Any, Callable
+from zoneinfo import ZoneInfo
 
 try:
     from dotenv import load_dotenv
@@ -48,6 +49,11 @@ def resolve_sqlite_path() -> Path:
 
 
 DB_PATH = resolve_sqlite_path()
+try:
+    APP_TIMEZONE = ZoneInfo(os.environ.get("APP_TIMEZONE", "Asia/Kolkata"))
+except Exception:
+    APP_TIMEZONE = timezone(timedelta(hours=5, minutes=30), "Asia/Kolkata")
+EXAM_START_GRACE_MS = 5 * 60 * 1000
 
 
 def now_ms() -> int:
@@ -367,7 +373,7 @@ def get_exam_window_ms(exam: Any) -> tuple[int, int]:
     exam_date_ms = exam["exam_date"]
     start_time_str = exam["start_time"] or "00:00"
     duration_min = exam["duration"] or 0
-    exam_date_dt = datetime.fromtimestamp(exam_date_ms / 1000, tz=timezone.utc)
+    exam_date_dt = datetime.fromtimestamp(exam_date_ms / 1000, tz=timezone.utc).astimezone(APP_TIMEZONE)
     try:
         parts = start_time_str.split(":")
         h, m = int(parts[0]), int(parts[1]) if len(parts) > 1 else 0
@@ -824,13 +830,6 @@ def list_exams():
     page, limit, offset = paginate()
     where, args = [], []
     status = request.args.get("status")
-    if status and status != "all":
-        if status == "upcoming":
-            where.append("exam_date > ?")
-            args.append(now_ms())
-        elif status in ("completed", "ongoing"):
-            where.append("status = ?")
-            args.append(status)
     if request.args.get("subject"):
         where.append("subject = ?")
         args.append(request.args["subject"])
@@ -850,8 +849,23 @@ def list_exams():
                 where.append(f"subject IN ({placeholders})")
                 args.extend(subjects)
     clause = f"WHERE {' AND '.join(where)}" if where else ""
-    total = query_one(f"SELECT COUNT(*) AS count FROM exams {clause}", tuple(args))["count"]
-    rows = query_all(f"SELECT * FROM exams {clause} ORDER BY exam_date DESC LIMIT ? OFFSET ?", (*args, limit, offset))
+    rows = query_all(f"SELECT * FROM exams {clause} ORDER BY exam_date DESC", tuple(args))
+    if status and status != "all":
+        current_ms = now_ms()
+
+        def matches_status(row: sqlite3.Row) -> bool:
+            start_ms, end_ms = get_exam_window_ms(row)
+            if status == "upcoming":
+                return row["status"] != "completed" and end_ms >= current_ms
+            if status == "ongoing":
+                return row["status"] != "completed" and start_ms - EXAM_START_GRACE_MS <= current_ms <= end_ms
+            if status == "completed":
+                return row["status"] == "completed" or end_ms < current_ms
+            return True
+
+        rows = [row for row in rows if matches_status(row)]
+    total = len(rows)
+    rows = rows[offset:offset + limit]
     return jsonify({"exams": [exam_json(r) for r in rows], "total": total, "page": page, "totalPages": math.ceil(total / limit)})
 
 
@@ -1154,8 +1168,8 @@ def start_exam(exam_id: int):
         return error("Exam not found", 404)
     start_ms, end_ms = get_exam_window_ms(exam)
     current_ms = now_ms()
-    if current_ms < start_ms:
-        start_dt = datetime.fromtimestamp(start_ms / 1000, tz=timezone.utc)
+    if current_ms < start_ms - EXAM_START_GRACE_MS:
+        start_dt = datetime.fromtimestamp(start_ms / 1000, tz=timezone.utc).astimezone(APP_TIMEZONE)
         return error(f"Exam has not started yet. It begins at {exam['start_time']} on {start_dt.strftime('%Y-%m-%d')}.", 403)
     if current_ms > end_ms:
         return error("Exam time has expired. The exam window has closed.", 403)
